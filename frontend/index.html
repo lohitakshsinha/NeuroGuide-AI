@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroGuide AI • Brain MRI Tumor Classification & Explainability Suite</title>
+  <meta name="description" content="Production-ready medical-educational AI system bridging deep learning classification, Grad-CAM visual explainability, Shannon uncertainty quantification, and clinical limitations.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/viewer.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="app-header" id="appHeader">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon" id="brandLogo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">NEUROGUIDE AI</h1>
+          <div class="brand-subtitle">
+            <span>Brain MRI Classifier & Visual Explainability Suite</span>
+            <span class="brand-subtitle-badge">Phase 5 Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-status-group">
+        <div class="status-badge" id="healthBadge">
+          <span class="status-indicator-dot"></span>
+          <span id="healthText">Connecting to API...</span>
+        </div>
+        <div class="header-nav-links">
+          <a href="/docs" target="_blank" class="nav-btn" id="btnDocs">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            API Docs
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="main-dashboard-grid">
+
+      <!-- Left Column: Input, Gallery & Dual Viewer -->
+      <section class="dashboard-column" aria-label="Scan Input and Viewer Controls">
+
+        <!-- [1] Scan Input & Gallery Card -->
+        <article class="glass-card" id="cardScanInput">
+          <div class="card-header-bar">
+            <h2 class="card-title">
+              <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              1. Scan Input & Sample Gallery
+            </h2>
+            <span class="card-badge" style="background: rgba(6,182,212,0.15); color: var(--cyan-primary);">OOD Protected</span>
+          </div>
+
+          <!-- Dropzone -->
+          <div class="dropzone-container" id="mriDropzone">
+            <div class="dropzone-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div class="dropzone-prompt">Drag & Drop Brain MRI Scan Here</div>
+            <div class="dropzone-hint">or click to browse local files (DICOM / JPEG / PNG)</div>
+            <input type="file" id="fileInput" class="file-input-hidden" accept=".jpg,.jpeg,.png,.webp,.bmp">
+          </div>
+
+          <!-- Alert / Error Banner -->
+          <div class="alert-banner" id="alertBanner" style="display: none;">
+            <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div>
+              <div class="alert-title">Diagnostic Notice</div>
+              <div id="alertMessage">Rejection notice here</div>
+            </div>
+          </div>
+
+          <!-- Curated Demo Samples -->
+          <div class="samples-section-title">
+            <span>Verified Clinical Demo Library</span>
+            <span style="font-size: 0.68rem; color: var(--text-dim); text-transform: none;">Instant 1-Click Verification</span>
+          </div>
+          <div class="sample-cards-grid" id="sampleCardsContainer">
+            <!-- Populated dynamically via app.js -->
+          </div>
+        </article>
+
+        <!-- [2] Dual Dynamic Viewer Card -->
+        <article class="glass-card" id="cardDualViewer">
+          <div class="card-header-bar">
+            <h2 class="card-title">
+              <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+              </svg>
+              2. Dual Dynamic Viewer & Explainability (Grad-CAM)
+            </h2>
+            <div class="segmented-control">
+              <button type="button" class="seg-btn active" id="btnSideBySide">Side-by-Side</button>
+              <button type="button" class="seg-btn" id="btnBlended">Blended</button>
+            </div>
+          </div>
+
+          <!-- Viewer Toolbar -->
+          <div class="viewer-header-toolbar">
+            <div class="viewer-toolbar-group">
+              <span class="toolbar-label">Heatmap Opacity:</span>
+              <div class="slider-wrapper">
+                <input type="range" id="opacitySlider" class="slider-clinical" min="0" max="1" step="0.05" value="0.55">
+                <span class="slider-val-badge" id="opacityVal">55%</span>
+              </div>
+            </div>
+
+            <div class="viewer-toolbar-group">
+              <span class="toolbar-label">Colormap:</span>
+              <div class="colormap-pills-group" id="colormapPillsGroup">
+                <button type="button" class="colormap-pill active" data-colormap="turbo">Turbo</button>
+                <button type="button" class="colormap-pill" data-colormap="jet">Jet</button>
+                <button type="button" class="colormap-pill" data-colormap="viridis">Viridis</button>
+              </div>
+            </div>
+
+            <div class="viewer-toolbar-group">
+              <label class="checkbox-toggle-wrap">
+                <input type="checkbox" id="bboxToggle" checked>
+                <span>Show ROI Box</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dual Viewport Container -->
+          <div class="viewport-container" id="viewportContainer">
+            <!-- Left: Anatomical Scan -->
+            <div class="canvas-panel" id="panelLeft">
+              <div class="canvas-panel-header">
+                <span class="canvas-label">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+                  Anatomical Preprocessed MRI
+                </span>
+                <span style="font-size: 0.68rem; color: var(--text-dim); font-family: var(--font-mono);">CLAHE Enriched</span>
+              </div>
+              <div class="canvas-viewport-box">
+                <div class="canvas-placeholder-empty" id="placeholderLeft">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="12" cy="12" r="6"/>
+                  </svg>
+                  <span>Awaiting MRI Scan...</span>
+                </div>
+                <canvas id="rawScanCanvas" class="scan-canvas" style="display: none;"></canvas>
+              </div>
+            </div>
+
+            <!-- Right: Grad-CAM Heatmap -->
+            <div class="canvas-panel" id="panelRight">
+              <div class="canvas-panel-header">
+                <span class="canvas-label">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                  Grad-CAM Feature Activation
+                </span>
+                <span style="font-size: 0.68rem; color: var(--cyan-primary); font-family: var(--font-mono);">Features[-1] Hook</span>
+              </div>
+              <div class="canvas-viewport-box">
+                <div class="canvas-placeholder-empty" id="placeholderRight">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Grad-CAM Activation Map</span>
+                </div>
+                <canvas id="overlayScanCanvas" class="scan-canvas" style="display: none;"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Viewport Footer Coordinates -->
+          <div class="viewport-status-footer">
+            <span id="coordDisplay">X: -- | Y: --</span>
+            <span id="statusDisplay">Awaiting MRI Scan...</span>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- Right Column: Analytics, ROI & Clinical Limitations -->
+      <section class="dashboard-column" aria-label="Diagnostic Analytics and Clinical Limitations">
+
+        <!-- [3] Prediction & Confidence Meter Hero Card -->
+        <article class="glass-card prediction-hero-card" id="cardPrediction">
+          <div class="card-header-bar">
+            <h2 class="card-title">
+              <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+              3. Prediction & Confidence Meter
+            </h2>
+            <span class="card-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent);">Multi-Class Softmax</span>
+          </div>
+
+          <!-- Hero Diagnosis Header -->
+          <div class="hero-prediction-header">
+            <div>
+              <div class="hero-label-sub">Top Predicted Classification</div>
+              <h3 class="hero-diagnosis-name" id="diagnosisName">Analyzing...</h3>
+              <div class="diagnosis-meta-tags">
+                <span class="badge-tag badge-who" id="diagnosisWhoBadge">WHO Grade</span>
+                <span class="badge-tag badge-urgency-high" id="diagnosisUrgencyBadge">Urgency</span>
+              </div>
+            </div>
+            <div>
+              <div class="hero-score-badge" id="diagnosisConfidence">--%</div>
+              <div class="hero-score-sub">Confidence</div>
+            </div>
+          </div>
+
+          <!-- Shannon Uncertainty Gauges Grid -->
+          <div class="uncertainty-metrics-grid">
+            <div class="uncertainty-metric-cell">
+              <span class="metric-cell-label">Shannon Entropy H(p)</span>
+              <span class="metric-cell-val" id="entropyVal">-- bits</span>
+            </div>
+            <div class="uncertainty-metric-cell">
+              <span class="metric-cell-label">Margin Delta Δ</span>
+              <span class="metric-cell-val" id="marginVal">-- %</span>
+            </div>
+            <div class="uncertainty-metric-cell">
+              <span class="metric-cell-label">Stability Category</span>
+              <span class="confidence-status-badge" id="confidenceBadge" style="background: rgba(255,255,255,0.08); color: #FFF;">--</span>
+            </div>
+          </div>
+
+          <!-- Clinical Caveat Alert if borderline/ambiguous -->
+          <div class="alert-banner warning" id="clinicalCaveatBox" style="display: none; margin-top: 0;">
+            <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <div>
+              <div class="alert-title">Diagnostic Margin Advisory</div>
+              <div id="clinicalCaveatText">Overlapping radiological patterns detected.</div>
+            </div>
+          </div>
+
+          <!-- 4-Class Probability Breakdown List -->
+          <div>
+            <div class="toolbar-label" style="margin-bottom: 12px;">Full Class Probability Distribution</div>
+            <div class="probabilities-breakdown-list" id="probabilitiesContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </article>
+
+        <!-- [4] ROI & Anatomical Localization Card -->
+        <article class="glass-card" id="cardRoi">
+          <div class="card-header-bar">
+            <h2 class="card-title">
+              <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              4. ROI & Anatomical Localization
+            </h2>
+            <span class="card-badge" style="background: rgba(59,130,246,0.15); color: #93C5FD;">Threshold: Top 20%</span>
+          </div>
+
+          <div class="roi-details-container">
+            <div class="quadrant-hero-box">
+              <div class="quadrant-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                </svg>
+              </div>
+              <div class="quadrant-info-texts">
+                <div class="quadrant-title" id="roiQuadrant">Determining Location...</div>
+                <div class="quadrant-desc" id="roiRegion">Neuroanatomical coordinates computed via Grad-CAM centroid.</div>
+              </div>
+            </div>
+
+            <div class="roi-stats-grid">
+              <div class="roi-stat-cell">
+                <div class="roi-stat-title">Bounding Box [X1, Y1, X2, Y2]</div>
+                <div class="roi-stat-value" id="roiBbox">[0, 0, 0, 0]</div>
+              </div>
+              <div class="roi-stat-cell">
+                <div class="roi-stat-title">Peak Activation Intensity</div>
+                <div class="roi-stat-value" id="roiPeak">--%</div>
+              </div>
+              <div class="roi-stat-cell">
+                <div class="roi-stat-title">Brain Parenchyma Area Fraction</div>
+                <div class="roi-stat-value" id="roiArea">--%</div>
+              </div>
+              <div class="roi-stat-cell">
+                <div class="roi-stat-title">Radiological Inversion</div>
+                <div class="roi-stat-value" style="font-size: 0.75rem; color: var(--cyan-primary);">Left = Anatomical Right</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- [5] Clinical Limitations & Caveats Card -->
+        <article class="glass-card" id="cardLimitations">
+          <div class="card-header-bar">
+            <h2 class="card-title">
+              <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              5. Clinical Limitations & Technical Caveats
+            </h2>
+            <span class="card-badge" style="background: rgba(139,92,246,0.15); color: #C4B5FD;">Safety Guardrails</span>
+          </div>
+
+          <div class="limitations-list" id="limitationsContainer">
+            <!-- Populated dynamically via app.js -->
+          </div>
+
+          <!-- Mandatory Non-Diagnostic Disclaimer -->
+          <div class="disclaimer-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <div>
+              <strong>RESEARCH & EDUCATIONAL PROTOTYPE ONLY</strong> — NeuroGuide AI is not approved by FDA/CE as a medical diagnostic device. Final patient care decisions must always be made by a licensed healthcare professional.
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+
+    <!-- Global Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner-clinical"></div>
+      <div style="font-size: 0.9rem; font-weight: 700; color: #FFFFFF;">Running Deep Neural Inference...</div>
+      <div style="font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-mono);">
+        Skull Stripping • CLAHE • Grad-CAM Backprop • Shannon Entropy
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Application Logic -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+# ============================================
+# NeuroGuide AI - .gitignore
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development
+.env.production
+*.env
+secrets.json
+config.local.*
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.coveragerc
+nosetests.xml
+test-results/
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Model & Training Artifacts (large files)
+*.pkl
+*.h5
+*.hdf5
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.pb
+training/checkpoints/
+training/models/
+training/runs/
+
+# Data files (add exceptions if needed)
+archive/
+data/raw/
+data/processed/
+*.csv
+*.parquet
+*.npy
+*.npz
+*.json
+!requirements*.json
+!package*.json
+
+# Build artifacts
+artifacts/
+*.whl
+*.tar.gz
+
+# Node (if any frontend tooling)
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Desktop.ini

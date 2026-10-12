@@ -1,0 +1,648 @@
+/* =========================================================================
+   NeuroGuide AI - Dual Dynamic Viewer, Analytics & Limitation Cards
+   ========================================================================= */
+
+/* =========================================================================
+   Dual Dynamic Viewer Toolbar & Controls
+   ========================================================================= */
+
+.viewer-header-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-input);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 20px;
+}
+
+.viewer-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Opacity Slider */
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-clinical {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 130px;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  transition: var(--transition);
+}
+
+.slider-clinical::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--cyan-primary);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--cyan-primary);
+  transition: transform 0.15s ease;
+}
+
+.slider-clinical::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.slider-val-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cyan-primary);
+  min-width: 38px;
+  text-align: right;
+}
+
+/* Colormap Selector Pills */
+.colormap-pills-group {
+  display: flex;
+  gap: 6px;
+}
+
+.colormap-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.colormap-pill:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.colormap-pill.active {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: var(--cyan-primary);
+  color: var(--cyan-primary);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+}
+
+/* Toggle Checkbox Switch */
+.checkbox-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  font-weight: 500;
+  user-select: none;
+}
+
+.checkbox-toggle-wrap input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border-medium);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.checkbox-toggle-wrap input[type="checkbox"]:checked {
+  background: var(--cyan-primary);
+  border-color: var(--cyan-primary);
+}
+
+.checkbox-toggle-wrap input[type="checkbox"]:checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #000;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+/* View Mode Segmented Controls */
+.segmented-control {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.seg-btn {
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.seg-btn.active {
+  background: var(--bg-card);
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================================
+   Dual Canvas Viewport
+   ========================================================================= */
+
+.viewport-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #04060A;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  position: relative;
+  min-height: 440px;
+  transition: var(--transition);
+}
+
+.viewport-container.single-mode {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.canvas-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.canvas-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.canvas-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.canvas-viewport-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scan-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Canvas Placeholder */
+.canvas-placeholder-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 24px;
+}
+
+.canvas-placeholder-empty svg {
+  width: 48px;
+  height: 48px;
+  stroke: rgba(255, 255, 255, 0.15);
+}
+
+/* Crosshair & Inspection Tooltip */
+.viewport-status-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================================================
+   [3] Prediction & Confidence Meter Hero Card
+   ========================================================================= */
+
+.prediction-hero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero-prediction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hero-label-sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+.hero-diagnosis-name {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.hero-score-badge {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--cyan-primary);
+  text-align: right;
+  line-height: 1;
+}
+
+.hero-score-sub {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.diagnosis-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.badge-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-who {
+  background: rgba(139, 92, 246, 0.15);
+  color: #C4B5FD;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.badge-urgency-high {
+  background: rgba(244, 63, 94, 0.15);
+  color: #FDA4AF;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.badge-urgency-moderate {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FCD34D;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-urgency-routine {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6EE7B7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Shannon Uncertainty Gauges */
+.uncertainty-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: var(--bg-input);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.uncertainty-metric-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-cell-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.metric-cell-val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+.confidence-status-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* 4-Class Probability Distributions */
+.probabilities-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prob-row-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prob-row-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.prob-name {
+  color: var(--text-main);
+}
+
+.prob-percentage {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.prob-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.prob-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--blue-primary), var(--cyan-primary));
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+}
+
+.prob-bar-fill.lead {
+  background: linear-gradient(90deg, #06B6D4, #3B82F6);
+}
+
+/* =========================================================================
+   [4] ROI & Anatomical Localization Card
+   ========================================================================= */
+
+.roi-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quadrant-hero-box {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.quadrant-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid var(--border-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quadrant-icon-box svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--cyan-primary);
+}
+
+.quadrant-info-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.quadrant-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.quadrant-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.roi-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.roi-stat-cell {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.roi-stat-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.roi-stat-value {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+/* =========================================================================
+   [5] Clinical Limitations & Caveats Card
+   ========================================================================= */
+
+.limitations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.limitation-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  transition: var(--transition);
+}
+
+.limitation-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.limitation-icon-col {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.limitation-icon-col svg {
+  width: 20px;
+  height: 20px;
+}
+
+.limitation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.limitation-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.limitation-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.limitation-severity-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.severity-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FCD34D;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.severity-critical {
+  background: rgba(244, 63, 94, 0.15);
+  color: #FDA4AF;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.severity-notice {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93C5FD;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.severity-mandatory {
+  background: rgba(139, 92, 246, 0.15);
+  color: #C4B5FD;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.limitation-body {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Regulatory Disclaimer Footer */
+.disclaimer-banner {
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.74rem;
+  color: #DDD6FE;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.disclaimer-banner svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  stroke: #A78BFA;
+}
